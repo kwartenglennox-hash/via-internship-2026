@@ -1,2 +1,3 @@
 # via-internship-2026
-Weekend Assignments
+Kwarteng Lennox
+5230160010
