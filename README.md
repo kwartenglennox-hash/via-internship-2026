@@ -8,4 +8,4 @@ Kwarteng Lennox
 - exploit2: [samba/usermap_script on port 139/445 -> root]
 - exploit3: [vsftpd backdoor confirmed uid=0(root)]
 
-All exploits executed successfully in isolated VirtualBox lab (Kali 192.168.1.5 -> Metasploitable 192.168.1.4). Mitigation: disable anonymous FTP, patch Samba, update vsftpd.
+All exploits executed successfully in isolated VirtualBox lab (Kali 192.168.1.5 -> Metasploitable 192.168.1.4). Mitigation: disable anonymous FTP, patch Samba, update vsftpd. 
